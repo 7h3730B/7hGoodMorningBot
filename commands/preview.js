@@ -1,8 +1,10 @@
+const gme = require('../good_morning'); 
+
 module.exports.run = async (client, message) => {
-	console.log('Todo: Send preview');
+    await gme(client, message);
 }
 
 module.exports.info = {
-	aliases: ['p', 'pr'],
+	aliases: ['p'],
 	description: 'Shows how the preview should look like'
 }

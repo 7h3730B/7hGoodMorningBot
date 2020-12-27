@@ -6,7 +6,6 @@ require('dotenv').config();
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
 client.commands = new Discord.Collection();
-client.plugins = new Discord.Collection();
 
 fs.readdir(join(__dirname, '/events/'), (err, files) => {
 	if (err) console.error(err);

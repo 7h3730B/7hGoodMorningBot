@@ -1,5 +1,4 @@
 module.exports.run = async (client, message) => {
-	console.log(message.author.username)
 	if (message.author.bot) return;
 	if (!message.content.startsWith('g!')) return;
 
