@@ -1,10 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 const requestify = require('requestify');
 
-inspiroBot = async (message) => {
+inspiroBot = async (member) => {
 	requestify.get('https://inspirobot.me/api?generate=true').then(response => {
 		response = response.getBody();
-		message.channel.send(new MessageEmbed()
+		member.send(new MessageEmbed()
 			.setTitle('Inspirational Image')
 			.setTimestamp()
 			.setURL(response)
@@ -14,11 +14,11 @@ inspiroBot = async (message) => {
 	});
 }
 
-apod = async (message) => {
+apod = async (member) => {
 	requestify.get('https://api.nasa.gov/planetary/apod?api_key=' + process.env.NASA_KEY).then(response => {
 		response = response.getBody();
 		if (!response['copyright']) { response['copyright'] = 'NASA' }
-		message.channel.send(new MessageEmbed()
+		member.send(new MessageEmbed()
 			.setTitle('Astronomy picture of the day: ' + response['title'])
 			.setTimestamp()
 			.setURL(response['url'])
@@ -29,9 +29,9 @@ apod = async (message) => {
 	});
 }
 
-currentTime = async (message) => {
+currentTime = async (member) => {
 	const today = new Date();
-	message.channel.send(new MessageEmbed()
+	member.send(new MessageEmbed()
 		.setTitle('Current Time')
 		.setTimestamp()
 		.setDescription(`It is ${getDayOfTheWeek(today.getDay())} ${today.getDate()}.${today.getMonth()}.${today.getFullYear()}:
@@ -39,11 +39,11 @@ currentTime = async (message) => {
 	);
 }
 
-getMeme = async (subreddit, message) => {
+getMeme = async (subreddit, member) => {
 	requestify.get(`https://www.reddit.com/r/${subreddit}.json`).then(response => {
 		response = response.getBody();
 		const data = response['data']['children'][Math.floor(1 + (Math.random() * response['data']['children'].length - 2))]['data'];
-		message.channel.send(new MessageEmbed()
+		member.send(new MessageEmbed()
 			.setTitle(data['title'])
 			.setImage(data['url'])
 			.setTimestamp()
@@ -56,9 +56,9 @@ function getDayOfTheWeek(day) {
 	return weekdays[day];
 }
 
-module.exports = async (client, message) => {
-	inspiroBot(message);
-	apod(message);
-	currentTime(message);
-	getMeme('memes', message);
+module.exports = async (client, member) => {
+	await currentTime(member);
+	await inspiroBot(member);
+	await apod(member);
+	await getMeme('memes', member);
 }
