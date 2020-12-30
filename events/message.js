@@ -14,5 +14,5 @@ module.exports.run = async (client, message) => {
 
 	args = str.split(/ +/);
 
-	cmdc.run(client, message, args)
+	cmdc.run(client, message, args);
 }
