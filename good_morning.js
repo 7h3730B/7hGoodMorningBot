@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const requestify = require('requestify');
 
-inspiroBot = async (member) => {
+async function inspiroBot(member) {
 	requestify.get('https://inspirobot.me/api?generate=true').then(response => {
 		response = response.getBody();
 		member.send(new MessageEmbed()
@@ -9,27 +9,27 @@ inspiroBot = async (member) => {
 			.setTimestamp()
 			.setURL(response)
 			.setImage(response)
-			.setAuthor("inspirobot.me", "http://inspirobot.me/website/images/inspirobot-dark-green.png")
+			.setAuthor('inspirobot.me', 'http://inspirobot.me/website/images/inspirobot-dark-green.png')
 		);
 	});
 }
 
-apod = async (member) => {
-	requestify.get('https://api.nasa.gov/planetary/apod?api_key=' + process.env.NASA_KEY).then(response => {
+async function apod(member) {
+	requestify.get(`https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_KEY}`).then(response => {
 		response = response.getBody();
-		if (!response['copyright']) { response['copyright'] = 'NASA' }
+		if (!response.copyright) { response.copyright = 'NASA' }
 		member.send(new MessageEmbed()
-			.setTitle('Astronomy picture of the day: ' + response['title'])
+			.setTitle(`Astronomy picture of the day: ${response.title}`)
 			.setTimestamp()
-			.setURL(response['url'])
-			.setImage(response['hdurl'])
-			.setDescription(response['explanation'])
-			.setAuthor(`© ${response['copyright']}`, 'https://i.pinimg.com/originals/4d/e4/30/4de430dde2298e5af2f8287318acf19f.png')
+			.setURL(response.url)
+			.setImage(response.hdurl)
+			.setDescription(response.explanation)
+			.setAuthor(`© ${response.copyright}`, 'https://i.pinimg.com/originals/4d/e4/30/4de430dde2298e5af2f8287318acf19f.png')
 		);
 	});
 }
 
-currentTime = async (member) => {
+async function currentTime(member) {
 	const today = new Date();
 	member.send(new MessageEmbed()
 		.setTitle('Current Time')
@@ -39,13 +39,13 @@ currentTime = async (member) => {
 	);
 }
 
-getMeme = async (subreddit, member) => {
+async function getMeme(subreddit, member) {
 	requestify.get(`https://www.reddit.com/r/${subreddit}.json`).then(response => {
 		response = response.getBody();
-		const data = response['data']['children'][Math.floor(1 + (Math.random() * response['data']['children'].length - 2))]['data'];
+		const { data } = response.data.children[Math.floor(1 + (Math.random() * response.data.children.length - 2))];
 		member.send(new MessageEmbed()
-			.setTitle(data['title'])
-			.setImage(data['url'])
+			.setTitle(data.title)
+			.setImage(data.url)
 			.setTimestamp()
 		);
 	});

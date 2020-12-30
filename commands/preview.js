@@ -1,4 +1,4 @@
-const gme = require('../good_morning'); 
+const gme = require('../good_morning');
 
 module.exports.run = async (client, message) => {
 	await gme(client, message.author);
